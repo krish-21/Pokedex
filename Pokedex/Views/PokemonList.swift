@@ -10,6 +10,7 @@ import SwiftUI
 
 struct PokemonList: View {
     @State var pokemonData: [Pokemon] = []
+    @State var caughtPokemon: [Int] = []
     
     @State private var searchPokemon = ""
     
@@ -19,7 +20,7 @@ struct PokemonList: View {
                 SearchBar(text: $searchPokemon)
                     .padding(.top, 10)
                 List(pokemonData.filter({searchPokemon.isEmpty ? true : $0.name.contains(searchPokemon.lowercased())})) { pokemon in
-                    NavigationLink(destination: PokemonDetail(url: pokemon.url)) {
+                    NavigationLink(destination: PokemonDetail(url: pokemon.url, caughtPokemon: self.$caughtPokemon)) {
                             PokemonRow(pokemon: pokemon)
                     }
                     .navigationBarTitle("Pokèdex", displayMode: .inline)
