@@ -28,8 +28,10 @@ class Api {
                 let allData = try JSONDecoder().decode(PokemonResults.self, from: JSONdata)
                 let data = allData.results
                 print("start of data")
-                print(data)
-                print("end of data")
+                for row in data {
+                    print(row)
+                }
+                print("end of data")                
                 
                 DispatchQueue.main.async {
                     completion(data)
