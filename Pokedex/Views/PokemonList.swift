@@ -30,6 +30,8 @@ struct PokemonList: View {
         .onAppear {
             Api().getPokemonList { (pokemon) in
                 self.pokemonData = pokemon
+                
+                self.caughtPokemon = UserDefaults.standard.array(forKey: "caught") as? [Int] ?? [Int]()
             }
         }
     }
