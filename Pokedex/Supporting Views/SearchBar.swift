@@ -15,17 +15,20 @@ struct SearchBar: View {
  
     var body: some View {
         HStack {
+            // Text Input
             TextField("Search Pokèmon", text: $text)
                 .padding(7)
                 .padding(.horizontal, 25)
                 .background(Color(.systemGray6))
                 .overlay(
                     HStack {
+                        // Maginifying Glass
                         Image(systemName: "magnifyingglass")
                             .foregroundColor(.gray)
                             .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
                             .padding(.leading, 8)
                  
+                        // "X" Button at the end of the SearchBar to clear input
                         if isEditing {
                             Button(action: {
                                 self.text = ""
@@ -43,6 +46,7 @@ struct SearchBar: View {
                     self.isEditing = true
                 }
  
+            // Cancel Button
             if isEditing {
                 Button(action: {
                     self.isEditing = false

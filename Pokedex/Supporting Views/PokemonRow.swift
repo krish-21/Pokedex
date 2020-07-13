@@ -8,10 +8,11 @@
 
 import SwiftUI
 
+// View to display each row of the Pokèmon List
 struct PokemonRow: View {
     var pokemon: Pokemon
     
     var body: some View {
-        Text(pokemon.name.prefix(1).uppercased() + pokemon.name.dropFirst())
+        Text(Helper.capitalize(name: pokemon.name))
     }
 }

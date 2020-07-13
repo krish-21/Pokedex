@@ -8,11 +8,12 @@
 
 import SwiftUI
 
+// View to display each type of a Pokèmon
 struct PokemonTypeView: View {
     var typeEntry: PokemonTypeEntry
     
     var body: some View {
-        Text(typeEntry.type.name.prefix(1).uppercased() + typeEntry.type.name.dropFirst())
+        Text(Helper.capitalize(name: typeEntry.type.name))
             .font(.system(size: 22))
     }
 }

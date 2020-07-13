@@ -12,30 +12,27 @@ class ImageLoader: ObservableObject {
     @Published var receivedData = false
     var data: Data?
     
-    // load the image as soon it is instantiated
+    // load the image data as soon it ImageLoader instantiated
     init(url: String) {
-        print("Image URL: ")
-        print(url)
+        // create url
         guard let url = URL(string: url) else {
             print("Couldn't load data.")
             fatalError("Couldn't load data.")
         }
-        print("URL Ok")
         
-        URLSession.shared.dataTask(with: url) { (data, respose, error) in
+        let task = URLSession.shared.dataTask(with: url) { (data, respose, error) in
+            // check if data is loaded
             guard let URLData = data else {
                 print("Couldn't load data")
                 fatalError("Couldn't load data")
             }
             
-            print("received URL Data")
-            
+            // dispatch update to main thread
             DispatchQueue.main.sync {
                 self.receivedData = true
                 self.data = URLData
             }
         }
-        .resume()
+        task.resume()
     }
-    
 }

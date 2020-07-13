@@ -20,6 +20,7 @@ struct PokemonDetail: View {
     
     @State var imageLoaded: Bool = false
     
+    // Array which keeps track of all the IDs of Pokèmon caught by the user
     @Binding var caughtPokemon: [Int]
     
     var body: some View {
@@ -27,20 +28,25 @@ struct PokemonDetail: View {
             if self.pokemonName.isEmpty {
                 Text("")
             } else {
+                // Pokèmon Image
                 PokemonImage(url: pokemonImageURL)
                 
-                Text(pokemonName.prefix(1).uppercased() + pokemonName.dropFirst())
+                // Pokèmon Name
+                Text(Helper.capitalize(name: pokemonName))
                     .font(.system(size: 30))
                 
+                // Pokèmon ID
                 Text(String(format: "#%03d", pokemonId))
                     .font(.system(size: 26))
                 
+                // HSrack for Pokèmon Types
                 HStack(spacing: 40) {
                     ForEach(pokemonTypes, id: \.slot) { typeEntry in
                         PokemonTypeView(typeEntry: typeEntry)
                     }
                 }
                 
+                // Button to Capture/Release Pokèmon
                 Button(action: {
                     if !self.isCaptured {
                         self.caughtPokemon.append(self.pokemonId)
@@ -48,7 +54,8 @@ struct PokemonDetail: View {
                         let index = self.caughtPokemon.firstIndex(of: self.pokemonId)
                         self.caughtPokemon.remove(at: index!)
                     }
-//                    print(self.caughtPokemon)
+
+                    // save each time user catches/releases Pokèmon
                     UserDefaults.standard.set(self.caughtPokemon, forKey: "caught")
                     self.isCaptured.toggle()
                 }) {
@@ -72,14 +79,16 @@ struct PokemonDetail: View {
                     
                 }
 
+                // Pokemon Description
                 Text(pokemonDescription)
                     .padding()
                 
-                .navigationBarTitle(pokemonName.prefix(1).uppercased() + pokemonName.dropFirst())
+                .navigationBarTitle(Helper.capitalize(name: pokemonName))
             }
                 
         }
         .onAppear {
+            // API Call to get details of current Pokèmon
             Api().getPokemonDetails(url: self.url) { (pokemonInfo) in
                 print(pokemonInfo)
                 self.pokemonId = pokemonInfo.id
@@ -88,6 +97,7 @@ struct PokemonDetail: View {
                 self.isCaptured = self.caughtPokemon.contains(self.pokemonId)
                 self.pokemonImageURL = pokemonInfo.sprites.front_default
                 
+                // API Call to get the description of the current Pokèmon
                 Api().getPokemonDescription(url: "https://pokeapi.co/api/v2/pokemon-species/" + String(self.pokemonId) + "/") { (pokemonDescription) in
                     self.pokemonDescription = pokemonDescription
                 }

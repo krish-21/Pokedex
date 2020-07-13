@@ -17,8 +17,12 @@ struct PokemonList: View {
     var body: some View {
         NavigationView {
             VStack {
+                // Search Bar
                 SearchBar(text: $searchPokemon)
                     .padding(.top, 10)
+                
+                // If Search Bar is empty: list all Pokèmon
+                // else: list Pokèmon matching user input
                 List(pokemonData.filter({searchPokemon.isEmpty ? true : $0.name.contains(searchPokemon.lowercased())})) { pokemon in
                     NavigationLink(destination: PokemonDetail(url: pokemon.url, caughtPokemon: self.$caughtPokemon)) {
                             PokemonRow(pokemon: pokemon)
@@ -28,9 +32,11 @@ struct PokemonList: View {
             }
         }
         .onAppear {
+            // API call to list Pokèmon
+            // limit of 151 hardcoded in Data.swift
             Api().getPokemonList { (pokemon) in
                 self.pokemonData = pokemon
-                
+                // load the saved Array of all the caught Pokèmon
                 self.caughtPokemon = UserDefaults.standard.array(forKey: "caught") as? [Int] ?? [Int]()
             }
         }
